@@ -1,0 +1,16 @@
+Hello! I am an experienced web developer. Here are some details about the website I would like to create.
+
+- There will only ever be two users for the site: me and my partner
+- The name of the site is FormPlay and on the site, users create and review "TPS Reports," which are a kind of intimacy proposal vehicle to help them spend more time together
+    - TPS stands for Trust, Pleasure, Safety and is a way to keep "Date Night" and "Cuddle Time ;)" off of the family smartfridge — a little inside joke to help keep the spark alive
+- The main asset for the site is a PDF document ("TPS 1.2 vanilla.pdf") that has been augmented with well-named form fields in Adobe Acrobat
+- TPS form interactions in the app should be logged into the database
+- Either me or my partner will visit the landing page and click "New TPS Report"
+    - This will redirect the user to an instance of the PDF form to fill out
+    - Once completed to the user's satisfaction, the TPS report and the form metadata is saved to disk and an email is sent to the partner, notifying them that a new TPS report is available to review
+- Once the report is created, it appears on the FormPlay landing page as pending. At this point the creator must not be able to make any more edits to the form, only the receiver. The partner (I.e. the user who didn't create the form) reviews the form details, fills in anything extra that might be missing, and sends it back with their initials with just a few clicks in the app.
+    - The response could also be a "Not into this" denial, which should mark the form as Aborted and notify the submitter. The app should be nice about this, though — that's very important. 
+- Now the form is filled out and ready for approval. The original submitter now sees the form and can approve it with their initials, or deny it due to the extra stuff that got added, in which case it gets aborted.
+- Aborted or completed TPS forms should be able to be Replicated, which simply creates a new form with those same things filled out but with the Emotional State and Date/Time values set back to defaults.
+- Once the submitter adds their initials, the hard work of initiation is done and FormPlay adds "Review TPS Reports" to both the users' calendars.
+- I would like to host this locally for intranet traffic only
