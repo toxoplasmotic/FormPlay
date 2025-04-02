@@ -1,9 +1,8 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { PdfFormField } from '@shared/schema';
 
-// Use CDN for the worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 
-  `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Set the worker source path to use the simple fake worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = '';
 
 // Enhanced form field interface with more properties
 interface FormField {
