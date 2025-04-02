@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useRoute } from "wouter";
 import Header from "@/components/header";
-import TpsForm from "@/components/tps-form";
+import PdfForm from "@/components/pdf-form";
 import TpsReview from "@/components/tps-review";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -138,7 +138,7 @@ export default function ViewTps() {
           </div>
           
           {formMode === "edit" ? (
-            <TpsForm 
+            <PdfForm 
               reportId={report.id}
               initialData={report}
               mode="edit"
@@ -151,19 +151,29 @@ export default function ViewTps() {
               onSubmitSuccess={handleSuccessAction}
             />
           ) : formMode === "review" || formMode === "approve" ? (
-            <TpsReview
-              report={report}
-              isCreator={isCreator}
-              username={username}
-              partnerName={partnerName}
-              onSuccessAction={handleSuccessAction}
+            <PdfForm
+              reportId={report.id}
+              initialData={report}
+              mode={formMode as "review" | "approve"}
+              userId={userId}
+              partnerId={isCreator ? report.receiver_id : report.creator_id}
+              userNames={{
+                user: username,
+                partner: partnerName
+              }}
+              onSubmitSuccess={handleSuccessAction}
             />
           ) : (
-            <TpsReview
-              report={report}
-              isCreator={isCreator}
-              username={username}
-              partnerName={partnerName}
+            <PdfForm
+              reportId={report.id}
+              initialData={report}
+              mode="review"
+              userId={userId}
+              partnerId={isCreator ? report.receiver_id : report.creator_id}
+              userNames={{
+                user: username,
+                partner: partnerName
+              }}
             />
           )}
         </div>

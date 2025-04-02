@@ -74,37 +74,23 @@ export type InsertTpsReport = z.infer<typeof insertTpsReportSchema>;
 export type TpsLog = typeof tpsLogs.$inferSelect;
 export type InsertTpsLog = z.infer<typeof insertTpsLogSchema>;
 
-// Form Data Types
-export interface EmotionalState {
-  matt: string;
-  mina: string;
-}
-
-export interface PhysicalCondition {
-  matt: string[];
-  mina: string[];
+// Form Data Types - Using a more generic approach for flexibility with different PDF forms
+export interface PdfFormField {
+  name: string;
+  type: string;
+  value: string | boolean | string[];
 }
 
 export interface TpsFormData {
-  emotional_state: EmotionalState;
-  physical_conditions: PhysicalCondition;
-  matt_notes: string;
-  mina_notes: string;
-  location: string;
-  location_other?: string;
-  sound: string;
-  alterations: string[];
-  alterations_other?: string;
-  kids: string[];
-  kids_other?: string;
-  activities: {
-    affection: string[];
-    light_intimacy: string[];
-    moderate_intimacy: string[];
-    intense_intimacy: string[];
-    intercourse: string[];
+  // Generic key-value store for form fields
+  fields: Record<string, any>;
+  // Separate metadata for display/processing needs that's not in the PDF
+  metadata?: {
+    matt_notes?: string;
+    mina_notes?: string;
+    location_display?: string;
+    [key: string]: any;
   };
-  netflix_show?: string;
 }
 
 // Status types

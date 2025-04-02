@@ -3,16 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
-import { TpsStatus, TpsFormData } from "@shared/schema";
-import { loadPdfForm, renderPdfToCanvas } from "@/lib/pdf";
+import { TpsStatus, TpsFormData, PdfFormField } from "@shared/schema";
+import { 
+  loadPdfForm, 
+  renderPdfToCanvas, 
+  getFormFields, 
+  createInteractiveFormElements,
+  convertToPdfFormFields,
+  createFieldsFromPdfFormData,
+  createFilledPdf,
+  savePdfToFile
+} from "@/lib/pdf";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { CalendarDays, Clock, Check, X, Save } from "lucide-react";
+import { CalendarDays, Clock, Check, X, Save, FilePdf, Download } from "lucide-react";
 
 interface TpsFormProps {
   reportId?: number;

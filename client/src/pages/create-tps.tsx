@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import Header from "@/components/header";
-import TpsForm from "@/components/tps-form";
+import PdfForm from "@/components/pdf-form";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
@@ -52,7 +52,7 @@ export default function CreateTps() {
           </div>
           
           {userId && partnerId ? (
-            <TpsForm 
+            <PdfForm 
               mode="create"
               userId={userId}
               partnerId={partnerId}
