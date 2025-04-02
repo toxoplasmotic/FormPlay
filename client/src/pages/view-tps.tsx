@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useRoute } from "wouter";
 import Header from "@/components/header";
-import PdfForm from "@/components/pdf-form";
+import SimplePdfForm from "@/components/simple-pdf-form";
 import TpsReview from "@/components/tps-review";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -138,7 +138,7 @@ export default function ViewTps() {
           </div>
           
           {formMode === "edit" ? (
-            <PdfForm 
+            <SimplePdfForm 
               reportId={report.id}
               initialData={report}
               mode="edit"
@@ -151,7 +151,7 @@ export default function ViewTps() {
               onSubmitSuccess={handleSuccessAction}
             />
           ) : formMode === "review" || formMode === "approve" ? (
-            <PdfForm
+            <SimplePdfForm
               reportId={report.id}
               initialData={report}
               mode={formMode as "review" | "approve"}
@@ -164,10 +164,10 @@ export default function ViewTps() {
               onSubmitSuccess={handleSuccessAction}
             />
           ) : (
-            <PdfForm
+            <SimplePdfForm
               reportId={report.id}
               initialData={report}
-              mode="review"
+              mode="view"
               userId={userId}
               partnerId={isCreator ? report.receiver_id : report.creator_id}
               userNames={{

@@ -1,8 +1,11 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { PdfFormField } from '@shared/schema';
 
-// Force the fake worker approach for simplicity
-pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+// Properly setup the PDF.js worker with the right path for our environment
+// This approach forces the use of the fake worker which will work in all environments
+const pdfjsVersion = '5.1.91';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '';  // Use fake worker for simplicity
+console.log('PDF.js initialization with version:', pdfjsVersion);
 
 // Enhanced form field interface with more properties
 interface FormField {

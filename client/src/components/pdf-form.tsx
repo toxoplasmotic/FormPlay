@@ -62,8 +62,10 @@ export default function PdfForm({
           throw new Error(`Failed to fetch PDF template: ${templateResponse.status} ${templateResponse.statusText}`);
         }
         
-        // Load the PDF template
-        const pdfBytes = await loadPdfForm('/api/templates/tps-vanilla');
+        // For safer loading, we'll read the arrayBuffer directly 
+        const arrayBuffer = await templateResponse.arrayBuffer();
+        const pdfBytes = new Uint8Array(arrayBuffer);
+        
         console.log('PDF template loaded successfully, size:', pdfBytes.length, 'bytes');
         setPdfData(pdfBytes);
         
@@ -91,15 +93,6 @@ export default function PdfForm({
               Object.keys(initialData.form_data.fields).forEach(key => {
                 initialFormValues[key] = initialData.form_data.fields[key];
               });
-              
-              // Also set metadata values
-              if (initialData.date) setMetaValues(prev => ({ ...prev, date: initialData.date }));
-              if (initialData.time_start) setMetaValues(prev => ({ ...prev, time_start: initialData.time_start }));
-              if (initialData.time_end) setMetaValues(prev => ({ ...prev, time_end: initialData.time_end }));
-              if (initialData.creator_notes) setMetaValues(prev => ({ ...prev, creator_notes: initialData.creator_notes }));
-              if (initialData.receiver_notes) setMetaValues(prev => ({ ...prev, receiver_notes: initialData.receiver_notes }));
-              if (initialData.creator_initials) setMetaValues(prev => ({ ...prev, creator_initials: initialData.creator_initials }));
-              if (initialData.receiver_initials) setMetaValues(prev => ({ ...prev, receiver_initials: initialData.receiver_initials }));
             }
             
             setFormValues(initialFormValues);
