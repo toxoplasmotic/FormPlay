@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { TpsStatus, PdfFormField } from "@shared/schema";
 import { 
@@ -18,7 +15,7 @@ import {
 } from "@/lib/pdf";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { CalendarDays, Clock, Check, X, Save, FileDown } from "lucide-react";
+import { Check, X, Save, FileDown } from "lucide-react";
 
 interface PdfFormProps {
   reportId?: number;
@@ -48,15 +45,6 @@ export default function PdfForm({
   const [pdfData, setPdfData] = useState<Uint8Array | null>(null);
   const [pdfFields, setPdfFields] = useState<any[]>([]);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
-  const [metaValues, setMetaValues] = useState({
-    date: new Date().toISOString().split('T')[0],
-    time_start: "21:30",
-    time_end: "22:00",
-    creator_notes: "",
-    receiver_notes: "",
-    creator_initials: "",
-    receiver_initials: ""
-  });
   
   // Refs for canvas and form overlay
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -155,12 +143,11 @@ export default function PdfForm({
     }));
   };
   
-  // Handle metadata changes (date, time, notes, etc.)
-  const handleMetaChange = (field: string, value: any) => {
-    setMetaValues(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  // Initialize minimal metadata with defaults
+  const metaValues = {
+    date: new Date().toISOString().split('T')[0],
+    time_start: "21:30",
+    time_end: "22:00",
   };
   
   // Handle form submission
@@ -301,88 +288,11 @@ export default function PdfForm({
       </div>
       
       <div className="px-4 py-5 sm:px-6">
-        {/* PDF Form Header - Metadata fields */}
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="date" className="flex items-center">
-              <CalendarDays className="h-4 w-4 mr-2" />
-              Date
-            </Label>
-            <Input
-              id="date"
-              type="date"
-              className="mt-1"
-              value={metaValues.date}
-              onChange={(e) => handleMetaChange('date', e.target.value)}
-              disabled={isReadOnly}
-            />
-          </div>
-          <div>
-            <Label htmlFor="time_start" className="flex items-center">
-              <Clock className="h-4 w-4 mr-2" />
-              Time (Start)
-            </Label>
-            <Input
-              id="time_start"
-              type="time"
-              className="mt-1"
-              value={metaValues.time_start}
-              onChange={(e) => handleMetaChange('time_start', e.target.value)}
-              disabled={isReadOnly}
-            />
-          </div>
-          <div>
-            <Label htmlFor="time_end" className="flex items-center">
-              <Clock className="h-4 w-4 mr-2" />
-              Time (End)
-            </Label>
-            <Input
-              id="time_end"
-              type="time"
-              className="mt-1"
-              value={metaValues.time_end}
-              onChange={(e) => handleMetaChange('time_end', e.target.value)}
-              disabled={isReadOnly}
-            />
-          </div>
-        </div>
-        
-        {/* PDF Interactive View */}
+        {/* PDF Interactive View - Only show the PDF form */}
         <div className="mb-6">
-          <div className="overflow-auto max-h-[600px] border rounded relative">
+          <div className="overflow-auto max-h-[700px] border rounded relative">
             <canvas ref={canvasRef} className="mx-auto" />
             <div ref={formOverlayRef} className="absolute top-0 left-0 w-full h-full pointer-events-auto"></div>
-          </div>
-        </div>
-        
-        {/* Notes Section */}
-        <div className="mb-6 space-y-4">
-          <div>
-            <Label htmlFor="creator_notes" className="block text-sm font-medium text-gray-700">
-              {userNames.user}'s Notes
-            </Label>
-            <Textarea
-              id="creator_notes"
-              className="mt-1"
-              value={metaValues.creator_notes}
-              onChange={(e) => handleMetaChange('creator_notes', e.target.value)}
-              disabled={!isCreator || isReadOnly}
-              placeholder="Add any additional notes or context here..."
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="receiver_notes" className="block text-sm font-medium text-gray-700">
-              {userNames.partner}'s Notes
-            </Label>
-            <Textarea
-              id="receiver_notes"
-              className="mt-1"
-              value={metaValues.receiver_notes}
-              onChange={(e) => handleMetaChange('receiver_notes', e.target.value)}
-              disabled={!isReceiver || isReadOnly}
-              placeholder="Add your response or thoughts here..."
-            />
           </div>
         </div>
         
