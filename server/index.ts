@@ -37,6 +37,18 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Initialize database
+  try {
+    log('Initializing database...', 'db');
+    // Import database functions here to avoid circular dependencies
+    const { runMigrations, seedDatabase } = await import('./db');
+    await runMigrations();
+    await seedDatabase();
+    log('Database initialized successfully', 'db');
+  } catch (error) {
+    log(`Database initialization error: ${error}`, 'db');
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

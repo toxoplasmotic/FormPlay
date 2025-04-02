@@ -66,16 +66,28 @@ export default function PdfForm({
   useEffect(() => {
     async function loadPdf() {
       try {
+        console.log('Attempting to load PDF template...');
+        
+        // First check if we can access the template
+        const templateResponse = await fetch('/api/templates/tps-vanilla');
+        if (!templateResponse.ok) {
+          throw new Error(`Failed to fetch PDF template: ${templateResponse.status} ${templateResponse.statusText}`);
+        }
+        
         // Load the PDF template
         const pdfBytes = await loadPdfForm('/api/templates/tps-vanilla');
+        console.log('PDF template loaded successfully, size:', pdfBytes.length, 'bytes');
         setPdfData(pdfBytes);
         
         // Render PDF to canvas
         if (canvasRef.current) {
+          console.log('Rendering PDF to canvas...');
           await renderPdfToCanvas(pdfBytes, canvasRef.current);
+          console.log('PDF rendered to canvas successfully');
           
           // Get form fields
           const fields = await getFormFields();
+          console.log('PDF form fields extracted:', fields.length, 'fields found');
           setPdfFields(fields);
           
           // Create interactive form elements
@@ -105,6 +117,7 @@ export default function PdfForm({
             setFormValues(initialFormValues);
             
             // Create interactive form elements
+            console.log('Creating interactive form elements...');
             const isReadOnly = (mode === "approve") || (mode === "review" && initialData?.status === TpsStatus.PENDING_APPROVAL);
             createInteractiveFormElements(
               formOverlayRef.current, 
@@ -114,20 +127,25 @@ export default function PdfForm({
               handleFormFieldChange,
               isReadOnly
             );
+            console.log('Interactive form elements created successfully');
+          } else {
+            console.error('Form overlay ref is null');
           }
+        } else {
+          console.error('Canvas ref is null');
         }
       } catch (error) {
         console.error('Error loading PDF:', error);
         toast({
           title: "Error loading PDF",
-          description: "Could not load or render the TPS Report template",
+          description: "Could not load or render the TPS Report template: " + (error instanceof Error ? error.message : String(error)),
           variant: "destructive"
         });
       }
     }
     
     loadPdf();
-  }, [initialData]);
+  }, [initialData, toast]);
   
   // Handle changes to form fields
   const handleFormFieldChange = (fieldName: string, value: any) => {
