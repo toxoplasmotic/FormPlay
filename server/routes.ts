@@ -413,12 +413,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Serve the PDF templates
   app.get('/api/templates/tps-vanilla', (req: Request, res: Response) => {
-    const pdfPath = path.join(process.cwd(), 'attached_assets', 'TPS 1.2 vanilla.pdf');
+    const pdfPath = path.join(process.cwd(), 'storage', 'pdfs', 'tps-vanilla.pdf');
     
     if (!fs.existsSync(pdfPath)) {
       return res.status(404).json({ message: 'PDF template not found' });
     }
     
+    console.log('Serving PDF template from:', pdfPath);
     res.contentType('application/pdf');
     res.sendFile(pdfPath);
   });
